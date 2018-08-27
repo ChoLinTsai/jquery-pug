@@ -1,0 +1,45 @@
+extends layout
+
+block scripts
+  script(src='http://localhost:9090/getAllUserData.js')
+
+block userPage
+  block header
+    .header
+      .header__userManager User Manager
+        
+      .header__avatar
+        .header__userName Tony Stark
+        button(type='button' class='header__logoutBtn') Logout
+
+  block body
+    .body
+      block upperBlock
+        .body__upperBlock
+          button(type='button'
+            class='add-btn btn btn-success mb-3'
+            data-toggle="modal"
+            data-target="#userModal") Add
+      block table
+        table.table
+          thead.table__thead.thead-light
+            tr
+              th ID
+              th First Name
+              th Last Name
+              th Email
+              th Created Time
+              th Update Time
+              th Edit/Delete
+          tbody.table__tbody
+  
+  include ./modal.pug
+            
+            
+            
+            
+            
+            
+    
+
+

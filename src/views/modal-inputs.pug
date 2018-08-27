@@ -1,0 +1,20 @@
+
+mixin inputs(label, type, action)
+  div.d-flex.flex-row.mb-3
+      div.input-group-prepend
+        span(class='input-group-text' id=action)= label
+      input(type=type
+        class!=attributes.class
+        placeholder=label
+        aria-label=label aria-describedby=action)
+
+
+block modal-inputs
+  div.input-group.d-flex.flex-column
+    +inputs('First Name', 'text', 'basic-addon1')(class="first_name  form-control")
+    +inputs('Last Name', 'text', 'basic-addon2')(class="last_name  form-control")
+    +inputs('Email', 'text', 'basic-addon3')(class="email form-control")
+    +inputs('Password', 'password', 'basic-addon4')(class="password form-control")
+    +inputs('Confirm Password', 'password', 'basic-addon5')(class="confirm_password form-control")
+      
+    

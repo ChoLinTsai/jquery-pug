@@ -1,0 +1,24 @@
+block modal
+  div(class="modal fade",
+  id="userModal",
+  tabindex="-1",
+  role="dialog",
+  aria-labelledby="exampleModalLabel",
+  aria-hidden="true")
+
+    block modal-dialog
+      div.modal-dialog
+        block modal-content
+          div.modal-content
+            block modal-header
+              div.modal-header
+                h5.modal-title#exampleModalLabel Modal Title
+                button(type='button', class='close', data-dismiss='modal', aria-label='close')
+                  span(aria-hidden='true') &times;
+            block modal-body
+              div.modal-body
+                include ./modal-inputs.pug
+            block modal-footer
+              div.modal-footer
+                button(type='button', class='btn btn-secondary', data-dismiss='modal') Close
+                button(type='button' class='confirm-btn btn btn-primary') Confirm
