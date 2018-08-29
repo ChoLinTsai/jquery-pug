@@ -1,0 +1,11 @@
+mixin inputs(label, type, action)
+  div.d-flex.flex-row.mb-3
+      div.input-group-prepend
+        span(class='input-group-text' id=action)= label
+      input(
+        type=type
+        class!=attributes.class
+        placeholder=label
+        aria-label=label
+        aria-describedby=action
+      )

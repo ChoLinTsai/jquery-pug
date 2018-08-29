@@ -1,0 +1,30 @@
+block deleteModal
+  div(class="modal fade",
+  id="deleteModal",
+  tabindex="-1",
+  role="dialog",
+  aria-labelledby="deleteModalLabel",
+  aria-hidden="true")
+
+    block modal-dialog
+      div.modal-dialog
+        block modal-content
+          div.modal-content
+            block modal-header
+              div.modal-header
+                h5.modal-title#deleteModalLabel Delete User
+                button(type='button', class='close', data-dismiss='modal', aria-label='close')
+                  span(aria-hidden='true') &times;
+            block modal-body
+              div.modal-body.d-flex.flex-column.align-items-center
+                h5 Are you sure you want to delete this user data?
+                label User ID
+                p.del-user-id.mb-3
+                label First Name
+                p.del-user-first-name.mb-3
+                label Last Name
+                p.del-user-last-name.mb-3
+            block modal-footer
+              div.modal-footer
+                button(type='button', class='btn btn-secondary', data-dismiss='modal') Close
+                button(type='button' id="delete-confirm-btn" class='btn btn-danger') Delete

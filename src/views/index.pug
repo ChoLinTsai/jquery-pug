@@ -4,17 +4,28 @@ block index
   .container
     .container__loginPanel
       block inputs
-        .inputField
+        div.input-group.mb-3
+          div.input-group-prepend
+            span.input-group-text#inputID ID
           input(
-            class='inputField__input inputField__input--userID'
+            id="input-userID"
+            class='form-control'
             type='text'
             placeholder='Please enter your ID...'
+            aria-label="UserID"
+            aria-describedby="inputID"
           )
+        div.input-group.mb-3
+          div.input-group-prepend
+            span.input-group-text#inputPW Password
           input(
-            class='inputField__input inputField__input--password'
-            type='text'
-            placeholder='Please enter your Password...'
+            id="input-userPW"
+            class='form-control'
+            type='password'
+            placeholder='Please enter your password...'
+            aria-label="UserPW"
+            aria-describedby="inputPW"
           )
         button(
-          type='button' class='inputField__loginBtn' href='#'
+          type='button' id='inputField__loginBtn' href='#'
         ) Login

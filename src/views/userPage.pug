@@ -9,13 +9,15 @@ block userPage
       .header__userManager User Manager
         
       .header__avatar
-        .header__userName Tony Stark
-        button(type='button' class='header__logoutBtn') Logout
+        .header__userName
+        button(type='button' id="logout-btn") Logout
 
   block body
     .body
       block upperBlock
         .body__upperBlock
+          p= id
+          p= first_name
           button(type='button'
             class='add-btn btn btn-success mb-3'
             data-toggle="modal"
@@ -32,9 +34,8 @@ block userPage
               th Update Time
               th Edit/Delete
           tbody.table__tbody
-  
-  include ./modal.pug
-            
+  include ./userModal.pug
+  include ./deleteModal.pug 
             
             
             
