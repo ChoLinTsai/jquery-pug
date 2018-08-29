@@ -45,7 +45,7 @@ app.set("view engine", "pug");
 
 
 app.use(cors({
-  origin: ['http://127.0.0.1:4000', 'http://localhost:3001'],
+  origin: ['http://127.0.0.1:4000', 'http://localhost:3000'],
   credentials: true
 }));
 

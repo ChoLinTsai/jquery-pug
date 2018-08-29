@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const crypto = require('crypto');
 
 /* GET users API listing. */
 router.get("/users", (req, res) => {
@@ -13,15 +12,15 @@ router.get("/users", (req, res) => {
           id, first_name, last_name, email,
           date_format(created_time, '%Y-%m-%d %H:%i:%s') as created_time,
           date_format(updated_time, '%Y-%m-%d %H:%i:%s') as updated_time
-          
+        
         FROM
           users;
       `;
 
   db.query(getAllUsers, (err, rows) => {
     errHandler(err);
-    let data = rows;
-    res.json(data);
+    res.json(rows);
+    // res.render('userPage', { id: 123, first_name: 'Max' })
   });
   // });
 });
@@ -126,28 +125,17 @@ router.put("/users/:id", (req, res, next) => {
     last_name = jsonData.last_name,
     password = jsonData.password,
     email = jsonData.email,
-    sqlWithPW = `
+    sql = `
         UPDATE
           users
         SET
           first_name = '${first_name}',
           last_name = '${last_name}',
-          password = MD5('${password}'),
+          ${password === '' ? '' : `password = MD5(${password}),`}
           email ='${email}'
         WHERE
           id = ${req.params.id};
-      `,
-    sqlWithoutPW = `
-        UPDATE
-          users
-        SET
-          first_name = '${first_name}',
-          last_name = '${last_name}',
-          email ='${email}'
-        WHERE
-          id = ${req.params.id};
-      `,
-    sql = password === undefined ? sqlWithoutPW : sqlWithPW;
+    `;
 
   db.query(sql, err => {
     errHandler(err);

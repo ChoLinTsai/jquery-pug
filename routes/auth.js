@@ -26,9 +26,8 @@ router.post("/login", (req, res) => {
 
   db.query(sql, (err, results) => {
     errHandler(err);
-    if (results[0] === 0) {
-      res.send("User Login failed, please try again.");
-      res.status(401).end();
+    if (results.length === 0) {
+      res.sendStatus(401);
       return;
     }
     res.cookie("user_name", `${results[0].first_name}_${results[0].last_name}`);
@@ -38,8 +37,6 @@ router.post("/login", (req, res) => {
 
 // Logout API
 router.get("/logout", (req, res) => {
-  // res.clearCookie("first_name", { path: "/" });
-  // res.clearCookie("last_name", { path: "/" });
   res.clearCookie("user_name");
   res.send("User cookie delete!");
 });
