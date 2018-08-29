@@ -5,6 +5,9 @@
   box-sizing: border-box;
 }
 
+input::placeholder {
+  font-size: 12px;
+}
 
 /* Home page */
 .container {
@@ -42,7 +45,7 @@
   height: 40px;
 }
 
-.inputField__loginBtn {
+#inputField__loginBtn {
   width: 200px;
   height: 50px;
   background: #99e1e5;
@@ -93,7 +96,7 @@
   align-items: center;
 }
 
-.header__logoutBtn {
+#logout-btn {
   width: 100px;
   height: 40px;
   background: #EF5350;
