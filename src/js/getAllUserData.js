@@ -1,103 +1,65 @@
-$(function () {
-  const API_USERS_URL = 'http://localhost:3000/api/users/';
-  const API_LOGOUT_URL = 'http://localhost:3000/auth/logout';
-  let prevPassword;
-  let editUserID;
+window.editUserModal = editUserModal;
+window.deleteUserModal = deleteUserModal;
+const API_USERS_URL = 'http://localhost:3000/api/users/';
+const API_LOGOUT_URL = 'http://localhost:3000/auth/logout';
+let prevPassword;
+let editUserID;
 
+// open edit and get target user data
+function editUserModal(event, userID) {
+  event.preventDefault()
+  $('#modal-confirm-btn').removeClass('add-mode').addClass('edit-mode');
+  $('#userModalLabel').text('Edit user data');
+  $.get(`${API_USERS_URL}${userID}`)
+    .then(data => {
+      $('#first_name').val(data[0].first_name);
+      $('#last_name').val(data[0].last_name);
+      $('#email').val(data[0].email);
+      $('#password').val(data[0].password);
+      prevPassword = data[0].password;
+      editUserID = data[0].id;
+    })
+}
+
+// open delete modal and get target user data
+function deleteUserModal(event, userID) {
+  event.preventDefault()
+  $.get(`${API_USERS_URL}${userID}`)
+    .then(data => {
+      $('#del-user-id').text(`${data[0].id}`)
+      $('#del-user-first-name').text(`${data[0].first_name}`)
+      $('#del-user-last-name').text(`${data[0].last_name}`)
+    })
+}
+
+// jquery document ready function
+$(function () {
   const getNameAry = document.cookie.split(';').map(
     data => data.split('').splice(10).join('').split('_').join(' ')
   );
+
   $('.header__userName').html(getNameAry)
 
-  $.get(API_USERS_URL, (data) => {
-    data.map(data => (
-      $('.table__tbody:last-child').append(
-        `<tr id='${data.id}'>
-          <td>${data.id}</td>
-          <td>${data.first_name}</td>
-          <td>${data.last_name}</td>
-          <td>${data.email}</td>
-          <td>${data.created_time}</td>
-          <td>${data.updated_time}</td>
-          <td>
-            <button
-              type="button"
-              id="edit-btn"
-              class="btn btn-warning btn-sm"
-              data-userid='${data.id}'
-              data-toggle="modal"
-              data-target="#userModal"
-            >
-              Edit
-            </button>
-            <button
-              type="button"
-              class="delete-btn btn btn-danger btn-sm"
-              data-userid='${data.id}'
-              data-toggle="modal"
-              data-target="#deleteModal"
-            >
-              Delete
-            </button>
-          </td>
-        </tr>`
-      )
-    ))
-  })
-
-  $('.table').on('click', '#edit-btn', (event) => {
-    event.preventDefault()
-    $('#modal-confirm-btn').removeClass('add-mode').addClass('edit-mode');
-    $('#userModalLabel').text('Edit user data');
-
-    $.get(`${API_USERS_URL}${event.target.getAttribute('data-userid')}`)
-      .then(data => {
-        $('input.first_name').val(data[0].first_name);
-        $('input.last_name').val(data[0].last_name);
-        $('input.email').val(data[0].email);
-        $('input.password').val(data[0].password);
-        prevPassword = data[0].password;
-        editUserID = data[0].id;
-      })
-  })
-
-  /*
-for(data){
-  <td>data.userId</td>
-  <td><input type="button" onClick="event(data.userId);"></td>
-}
-
-  */
-
-  $('.table').on('click', '.delete-btn', (event) => {
-    event.preventDefault()
-    $.get(`${API_USERS_URL}${event.target.getAttribute('data-userid')}`)
-      .then(data => {
-
-        $('.del-user-id').text(`${data[0].id}`)
-        $('.del-user-first-name').text(`${data[0].first_name}`)
-        $('.del-user-last-name').text(`${data[0].last_name}`)
-      })
-  })
-
-
-  $('button.add-btn').click(event => {
+  // open add modal and set to add-mode
+  $('#add-btn').click(event => {
     event.preventDefault();
     $('input').val('');
     $('#modal-confirm-btn').removeClass('edit-mode').addClass('add-mode');
     $('#userModalLabel').text('Add a new user');
   })
 
+  // clear input values after close modal
   $('#modal-close-btn').click(event => {
     event.preventDefault();
     $('input').val('');
   })
 
-
+  // key up event to update input values
   $('input').keyup((event) => {
     $(this).val(`${event.target.value}`);
   })
 
+  // confirm action is add||edit to create||edit user data 
   $('#modal-confirm-btn').click(event => {
     event.preventDefault()
     let [
@@ -112,12 +74,12 @@ for(data){
 
     if ($('#modal-confirm-btn').hasClass('add-mode')) {
       // add mode
-      if ($('input.first_name').val() === '') return alert('First Name is required.')
-      if ($('input.last_name').val() === '') return alert('Last Name is required.')
-      if ($('input.email').val() === '') return alert('Email is required.')
-      if ($('input.password').val() === '') return alert('Password is required.')
-      if ($('input.confirm_password').val() === '') return alert('Confirm Password is required.')
-      if ($('input.password').val() === $('input.confirm_password').val()) {
+      if ($('#first_name').val() === '') return alert('First Name is required.')
+      if ($('#last_name').val() === '') return alert('Last Name is required.')
+      if ($('#email').val() === '') return alert('Email is required.')
+      if ($('#password').val() === '') return alert('Password is required.')
+      if ($('#confirm_password').val() === '') return alert('Confirm Password is required.')
+      if ($('#password').val() === $('#confirm_password').val()) {
         let newUserData = {
           first_name: first_name,
           last_name: last_name,
@@ -169,18 +131,16 @@ for(data){
     }
   })
 
-
-
+  // confirm delete target user data
   $('#delete-confirm-btn').click(() => {
     $.ajax({
-      url: `${API_USERS_URL}${$('.del-user-id').text()}`,
+      url: `${API_USERS_URL}${$('#del-user-id').text()}`,
       method: 'DELETE',
       success: window.location.reload(),
     })
   })
 
-
-
+  // logout function
   $('#logout-btn').click(() => {
     $.ajax({
       url: API_LOGOUT_URL,
