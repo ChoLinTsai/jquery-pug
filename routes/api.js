@@ -12,16 +12,16 @@ router.get("/users", (req, res) => {
           id, first_name, last_name, email,
           date_format(created_time, '%Y-%m-%d %H:%i:%s') as created_time,
           date_format(updated_time, '%Y-%m-%d %H:%i:%s') as updated_time
-        
+
         FROM
           users;
       `;
 
   db.query(getAllUsers, (err, rows) => {
-    errHandler(err);
-    res.json(rows);
-    // res.render('userPage', { id: 123, first_name: 'Max' })
-  });
+    // errHandler(err);
+    // res.json(rows);
+    res.render('userPage', { id: 123, name: 'Max' })
+  })
   // });
 });
 

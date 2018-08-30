@@ -23,23 +23,5 @@ $(function () {
         withCredentials: true
       }
     })
-
-
   })
-
-  // Logout function
-  $('.header__logoutBtn').click((e) => {
-    e.preventDefault();
-    $.ajax({
-      url: 'http://localhost:3000/',
-      success: (req, res) => {
-        location.href = '/'
-      }
-    })
-  })
-
-
-
-
-
 }); //eof document ready function

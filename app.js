@@ -34,16 +34,6 @@ con.connect(function (err) {
 app.set("views", path.join(__dirname, "src/views"));
 app.set("view engine", "pug");
 
-// app.get('/', (req, res) => {
-//   res.render('index')
-// })
-
-// app.get('/userPage', (req, res) => {
-//   res.render('userPage')
-// })
-
-
-
 app.use(cors({
   origin: ['http://127.0.0.1:4000', 'http://localhost:3000'],
   credentials: true
@@ -54,19 +44,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-
-
-
-
 // express session
 app.use(express.static(path.join(__dirname, "src")));
-// app.use(
-//   session({
-//     secret: "12345",
-//     resave: true,
-//     saveUninitialized: true
-//   })
-// );
 
 // Authentication and Authorization Middleware
 var auth = function (req, res, next) {
