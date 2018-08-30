@@ -7,7 +7,7 @@ block userPage
   block header
     .header
       .header__userManager User Manager
-        
+      
       .header__avatar
         .header__userName
         button(type='button' id="logout-btn") Logout
@@ -16,12 +16,13 @@ block userPage
     .body
       block upperBlock
         .body__upperBlock
-          p= id
-          p= first_name
-          button(type='button'
-            class='add-btn btn btn-success mb-3'
+          button(
+            id="add-btn"
+            type='button'
+            class='btn btn-success mb-3'
             data-toggle="modal"
-            data-target="#userModal") Add
+            data-target="#userModal"
+          ) Add
       block table
         table.table
           thead.table__thead.thead-light
@@ -34,6 +35,30 @@ block userPage
               th Update Time
               th Edit/Delete
           tbody.table__tbody
+              for item in result
+                tr(id= item.id)
+                  td #{item.id}
+                  td #{item.first_name}
+                  td #{item.last_name}
+                  td #{item.email}
+                  td #{item.created_time}
+                  td #{item.updated_time}
+                  td
+                    button(
+                      type="button"
+                      class="btn btn-warning btn-sm mr-2"
+                      onclick=`editUserModal(event, ${item.id})`
+                      data-toggle="modal"
+                      data-target="#userModal"
+                    ) Edit
+                    button(
+                      type="button"
+                      class="btn btn-danger btn-sm"
+                      onclick=`deleteUserModal(event, ${item.id})`
+                      data-toggle="modal"
+                      data-target="#deleteModal"
+                    ) Delete                  
+
   include ./userModal.pug
   include ./deleteModal.pug 
             
