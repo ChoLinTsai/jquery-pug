@@ -1,8 +1,9 @@
-mixin inputs(label, type, action)
+mixin inputs(label, type, action, id)
   div.d-flex.flex-row.mb-3
       div.input-group-prepend
         span(class='input-group-text' id=action)= label
       input(
+        id=id
         type=type
         class!=attributes.class
         placeholder=label
