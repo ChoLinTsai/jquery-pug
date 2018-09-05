@@ -1,11 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-/* GET users listing. */
-// router.get("/", (req, res) => {
-//   res.send("respond with a resource");
-// });
-
 // Login API
 router.post("/login", (req, res) => {
   let db = req.con,
@@ -40,8 +35,6 @@ router.get("/logout", (req, res) => {
   res.clearCookie("user_name");
   res.send("User cookie delete!");
 });
-
-
 
 // Error handler
 function errHandler(err) {

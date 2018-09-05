@@ -86,8 +86,5 @@ const PORT = 4000;
 const HOST = "127.0.0.1";
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);
-//server.listen(port, hostname, () => {
-//  console.log(`Server running at http://${hostname}:${port}/`);
-//});
 
 module.exports = app;
