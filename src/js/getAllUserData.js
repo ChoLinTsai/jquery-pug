@@ -5,20 +5,22 @@ const API_LOGOUT_URL = 'http://localhost:3000/auth/logout';
 let prevPassword;
 let editUserID;
 
-// open edit and get target user data
+// open edit modal and get target user data
 function editUserModal(event, userID) {
   event.preventDefault()
   $('#modal-confirm-btn').removeClass('add-mode').addClass('edit-mode');
   $('#userModalLabel').text('Edit user data');
   $.get(`${API_USERS_URL}${userID}`)
     .then(data => {
-      $('#first_name').val(data[0].first_name);
-      $('#last_name').val(data[0].last_name);
-      $('#email').val(data[0].email);
-      $('#password').val(data[0].password);
-      prevPassword = data[0].password;
-      editUserID = data[0].id;
+      let getData = data[0];
+      $('#first_name').val(getData.first_name);
+      $('#last_name').val(getData.last_name);
+      $('#email').val(getData.email);
+      $('#password').val(getData.password);
+      prevPassword = getData.password;
+      editUserID = getData.id;
     })
+    .fail(() => alert('Fetched failed!'))
 }
 
 // open delete modal and get target user data
@@ -26,10 +28,12 @@ function deleteUserModal(event, userID) {
   event.preventDefault()
   $.get(`${API_USERS_URL}${userID}`)
     .then(data => {
-      $('#del-user-id').text(`${data[0].id}`)
-      $('#del-user-first-name').text(`${data[0].first_name}`)
-      $('#del-user-last-name').text(`${data[0].last_name}`)
+      let getData = data[0];
+      $('#del-user-id').text(`${getData.id}`)
+      $('#del-user-first-name').text(`${getData.first_name}`)
+      $('#del-user-last-name').text(`${getData.last_name}`)
     })
+    .fail(() => alert('Fetched failed!'))
 }
 
 // jquery document ready function
@@ -74,11 +78,12 @@ $(function () {
 
     if ($('#modal-confirm-btn').hasClass('add-mode')) {
       // add mode
-      if ($('#first_name').val() === '') return alert('First Name is required.')
-      if ($('#last_name').val() === '') return alert('Last Name is required.')
+      if ($('#first_name').val() === '') return alert('First Name is required.');
+      if ($('#last_name').val() === '') return alert('Last Name is required.');
       if ($('#email').val() === '') return alert('Email is required.')
-      if ($('#password').val() === '') return alert('Password is required.')
-      if ($('#confirm_password').val() === '') return alert('Confirm Password is required.')
+      if (!checkEmail($('#email').val())) return alert('Please check your email!');
+      if ($('#password').val() === '') return alert('Password is required.');
+      if ($('#confirm_password').val() === '') return alert('Confirm Password is required.');
       if ($('#password').val() === $('#confirm_password').val()) {
         let newUserData = {
           first_name: first_name,
@@ -92,19 +97,22 @@ $(function () {
           method: 'POST',
           data: newUserData,
           success: window.location.reload(),
+          error: () => alert('User created failed!'),
         })
 
       } else {
         alert('Please confirm/check your password!')
       }
+    }
 
-    } else {
+    if ($('#modal-confirm-btn').hasClass('edit-mode')) {
       // edit mode
       let alertMsg = 'Please check/confirm your password!';
 
       if (first_name === '') return alert('First Name is required.')
       if (last_name === '') return alert('Last Name is required.')
       if (email === '') return alert('Email is required.')
+      if (!checkEmail($('#email').val())) return alert(alertMsg);
       if (password !== prevPassword) {
         if (password !== confirm_password) return alert(alertMsg)
       }
@@ -127,6 +135,7 @@ $(function () {
         method: 'PUT',
         data: editUserData,
         success: window.location.reload(),
+        error: () => alert('User updated failed!'),
       })
     }
   })
@@ -137,6 +146,7 @@ $(function () {
       url: `${API_USERS_URL}${$('#del-user-id').text()}`,
       method: 'DELETE',
       success: window.location.reload(),
+      error: () => alert('User deleted failed!'),
     })
   })
 
@@ -148,8 +158,14 @@ $(function () {
       success: location.href = '/',
       xhrFields: {
         withCredentials: true
-      }
+      },
+      error: () => alert('Logout failed!'),
     })
   })
+
+  function checkEmail(email) {
+    let regex = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+    return regex.test(email);
+  }
 
 }); //eof document ready function
