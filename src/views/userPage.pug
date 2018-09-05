@@ -2,7 +2,7 @@ extends layout
 
 block scripts
   script(src='http://localhost:9090/getAllUserData.js')
-
+  
 block userPage
   block header
     .header
@@ -35,6 +35,7 @@ block userPage
               th Update Time
               th Edit/Delete
           tbody.table__tbody
+            if result
               for item in result
                 tr(id= item.id)
                   td #{item.id}
@@ -57,7 +58,9 @@ block userPage
                       onclick=`deleteUserModal(event, ${item.id})`
                       data-toggle="modal"
                       data-target="#deleteModal"
-                    ) Delete                  
+                    ) Delete
+            else
+              h1 Sorry, We could not find any user data.        
 
   include ./userModal.pug
   include ./deleteModal.pug 
