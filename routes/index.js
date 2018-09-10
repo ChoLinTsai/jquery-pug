@@ -9,22 +9,22 @@ router.get('/', (req, res) => {
 })
 
 router.get('/userPage', (req, res) => {
-  userCheck(req, res, () => {
-    let db = req.con;
-    let getAllUsers = `
+  // userCheck(req, res, () => {
+  let db = req.con;
+  let getAllUsers = `
         SELECT
           id, first_name, last_name, email,
-          date_format(created_time, '%Y-%m-%d %H:%i:%s') as created_time,
-          date_format(updated_time, '%Y-%m-%d %H:%i:%s') as updated_time
+          UNIX_TIMESTAMP(created_time) as created_time,
+          UNIX_TIMESTAMP(updated_time) as updated_time
 
         FROM
           users;
       `;
 
-    db.query(getAllUsers, (err, result) => {
-      res.render('userPage', { result });
-    })
+  db.query(getAllUsers, (err, result) => {
+    res.render('userPage', { result });
   })
+  // })
 })
 
 // user login check
