@@ -3,15 +3,15 @@ const router = express.Router();
 
 // Create users API listing
 router.post("/users", (req, res) => {
-  userCheck(req, res, () => {
-    let db = req.con,
-      jsonData = req.body,
-      first_name = jsonData.first_name,
-      last_name = jsonData.last_name,
-      password = jsonData.password,
-      email = jsonData.email,
+  // userCheck(req, res, () => {
+  let db = req.con,
+    jsonData = req.body,
+    first_name = jsonData.first_name,
+    last_name = jsonData.last_name,
+    password = jsonData.password,
+    email = jsonData.email,
 
-      sql = `
+    sql = `
         INSERT INTO users (
           first_name,
           last_name,
@@ -26,16 +26,16 @@ router.post("/users", (req, res) => {
         );
       `;
 
-    db.query(sql, (err, results) => {
-      if (!err) {
-        res.send(results);
-      } else {
-        res.status(400);
-        console.log(111, err)
-        res.send("something is wrong!");
-      }
-    });
+  db.query(sql, (err, results) => {
+    if (!err) {
+      res.send(results);
+    } else {
+      res.status(400);
+      console.log(111, err)
+      res.send("something is wrong!");
+    }
   });
+  // });
 });
 
 /* GET one user API listing. */
