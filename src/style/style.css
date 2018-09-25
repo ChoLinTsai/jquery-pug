@@ -124,7 +124,7 @@ input::placeholder {
 
 .body__upperBlock {
   width: 100%;
-  height: 20%;
+  height: 10%;
   display: flex;
   justify-content: flex-start;
   align-items: flex-end;
@@ -142,4 +142,8 @@ input::placeholder {
 button {
   width: 100px;
   height: 50px;
+}
+
+#downloadBtn {
+  width: 150px;
 }

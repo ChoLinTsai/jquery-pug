@@ -1,0 +1,50 @@
+- const FILE_DOWNLOAD_URL = 'http://localhost:3000/file/fileDownload/';
+- const FILE_DELETE_URL = 'http://localhost:3000/file/fileDelete/';
+
+
+
+block fileManager
+  block upperBlock
+    div.fileBlock.m-3.d-flex
+        form(
+          id='fileForm'
+          enctype='multipart/form-data'
+          method='post'
+        )
+          input(
+            type='file'
+            name='file'
+            id='fileInput'
+            class='form-control-file'
+          )
+        button(
+          id='uploadBtn'
+          class='btn btn-success'
+          type='submit'
+        ) Upload File
+
+  block table
+    table.table
+      thead.table__thead.thead-light
+        tr
+          th File Name
+          th Download/Delete
+      tbody.table__tbody
+        if view.fileName
+          for item in view.fileName
+            tr
+              td #{item}
+              td
+                a(
+                  href=`${FILE_DOWNLOAD_URL}${item}`
+                  class='btn btn-warning mx-3'
+                  download
+                ) Download
+
+                button(
+                  class='btn btn-danger mx-3'
+                  type='button'
+                  onclick=`deleteFile(event, '${item}')`
+                ) Delete
+        else
+          h1 Sorry, we could not find any file.

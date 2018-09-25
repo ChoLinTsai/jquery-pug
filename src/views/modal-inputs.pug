@@ -2,9 +2,10 @@ include ./mixins.pug
 
 block modal-inputs
   div.input-group.d-flex.flex-column
-    //- label, type, action, id
-    +inputs('First Name', 'text', 'basic-addon1', 'first_name')(class="form-control")
-    +inputs('Last Name', 'text', 'basic-addon2', 'last_name')(class="form-control")
-    +inputs('Email', 'text', 'basic-addon3', 'email')(class="form-control")
-    +inputs('Password', 'password', 'basic-addon4', 'password')(class="form-control")
-    +inputs('Confirm Password', 'password', 'basic-addon5', 'confirm_password')(class="form-control")
+    //- label, type, placeholder,action, id, disabled
+    +inputs('ID', 'text', 'ID','basic-addon6', 'userID', true)(class="form-control")
+    +inputs('First Name', 'text', 'First Name','basic-addon1', 'first_name')(class="form-control")
+    +inputs('Last Name', 'text', 'Last Name','basic-addon2', 'last_name')(class="form-control")
+    +inputs('Email', 'text', 'Email', 'basic-addon3', 'email')(class="form-control")
+    +inputs('Password', 'password', 'Password','basic-addon4', 'password')(class="form-control")
+    +inputs('Confirm Password', 'password', 'Confirm Password','basic-addon5', 'confirm_password')(class="form-control")

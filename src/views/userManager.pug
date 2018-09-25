@@ -1,19 +1,6 @@
-extends layout
 
-block scripts
-  script(src='http://localhost:9090/getAllUserData.js')
-  
-block userPage
-  block header
-    .header
-      .header__userManager User Manager
-      
-      .header__avatar
-        .header__userName
-        button(type='button' id="logout-btn") Logout
-
-  block body
-    .body
+block userManager
+  .body
       block upperBlock
         .body__upperBlock
           button(
@@ -23,6 +10,7 @@ block userPage
             data-toggle="modal"
             data-target="#userModal"
           ) Add
+
       block table
         table.table
           thead.table__thead.thead-light
@@ -35,15 +23,15 @@ block userPage
               th Update Time
               th Edit/Delete
           tbody.table__tbody
-            if result
-              for item in result
+            if view.result
+              for item in view.result
                 tr(id= item.id)
                   td #{item.id}
                   td #{item.first_name}
                   td #{item.last_name}
                   td #{item.email}
-                  td #{item.created_time}
-                  td #{item.updated_time}
+                  td #{moment.unix(item.created_time).format('YYYY-MM-DD hh:mm:ss')}
+                  td #{moment.unix(item.updated_time).format('YYYY-MM-DD hh:mm:ss')}
                   td
                     button(
                       type="button"
@@ -60,15 +48,4 @@ block userPage
                       data-target="#deleteModal"
                     ) Delete
             else
-              h1 Sorry, We could not find any user data.        
-
-  include ./userModal.pug
-  include ./deleteModal.pug 
-            
-            
-            
-            
-            
-    
-
-
+              h1 Sorry, We could not find any user data.      

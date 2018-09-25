@@ -1,0 +1,68 @@
+extends layout
+
+block scripts
+  script(src='http://localhost:9090/modals.js')
+  script(src='http://localhost:9090/getAllUserData.js')
+  
+block manager
+  block header
+    .header
+      .header__userManager Manager
+      .header__avatar
+        - let full_name = `${view.user.first_name} ${view.user.last_name}`
+        if (view.user === undefined)
+          p SuperUser
+        else
+          div.header__userName #{full_name}
+        button(type='button' id="logout-btn") Logout
+
+  block body
+    nav(class="m-2")
+      div(class="nav nav-tabs" id="nav-tab" role="tablist")
+        a(
+          class="nav-item nav-link active"
+          id="nav-user-tab"
+          data-toggle="tab"
+          href="#nav-user"
+          role="tab"
+          aria-controls="nav-user"
+          aria-selected="true"
+        ) Users
+        a(
+          class="nav-item nav-link"
+          id="nav-file-tab"
+          data-toggle="tab"
+          href="#nav-file"
+          role="tab"
+          aria-controls="nav-file"
+          aria-selected="false"
+        ) Files
+
+    div(class="tab-content m-2" id="nav-tabContent")
+      div(
+        class="tab-pane show active"
+        id="nav-user"
+        role="tabpanel"
+        aria-labelledby="nav-user-tab"
+      )
+        include ./userManager.pug
+        
+
+      div(
+        class="tab-pane"
+        id="nav-file"
+        role="tabpanel"
+        aria-labelledby="nav-file-tab"
+      )
+        include ./fileManager.pug
+
+  include ./userModal.pug
+  include ./deleteModal.pug 
+            
+            
+            
+            
+            
+    
+
+

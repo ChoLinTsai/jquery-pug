@@ -1,4 +1,4 @@
-mixin inputs(label, type, action, id)
+mixin inputs(label, type, placeholder,action, id, disabled = false)
   div.d-flex.flex-row.mb-3
       div.input-group-prepend
         span(class='input-group-text' id=action)= label
@@ -6,7 +6,8 @@ mixin inputs(label, type, action, id)
         id=id
         type=type
         class!=attributes.class
-        placeholder=label
+        placeholder=placeholder
         aria-label=label
         aria-describedby=action
+        disabled=disabled
       )
