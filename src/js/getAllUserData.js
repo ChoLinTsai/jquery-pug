@@ -1,52 +1,20 @@
-window.editUserModal = editUserModal;
-window.deleteUserModal = deleteUserModal;
+const modals = require('./modals.js');
 const API_USERS_URL = 'http://localhost:3000/api/users/';
+const API_FILEUPLOAD_URL = 'http://localhost:3000/file/fileUpload/';
+const API_FILEDOWNLOAD_URL = 'http://localhost:3000/file/fileDownload/';
 const API_LOGOUT_URL = 'http://localhost:3000/auth/logout';
-let prevPassword;
-let editUserID;
-
-// open edit modal and get target user data
-function editUserModal(event, userID) {
-  event.preventDefault()
-  $('#modal-confirm-btn').removeClass('add-mode').addClass('edit-mode');
-  $('#userModalLabel').text('Edit user data');
-  $.get(`${API_USERS_URL}${userID}`)
-    .then(data => {
-      let getData = data[0];
-      $('#first_name').val(getData.first_name);
-      $('#last_name').val(getData.last_name);
-      $('#email').val(getData.email);
-      $('#password').val(getData.password);
-      prevPassword = getData.password;
-      editUserID = getData.id;
-    })
-    .fail(() => alert('Fetched failed!'))
-}
-
-// open delete modal and get target user data
-function deleteUserModal(event, userID) {
-  event.preventDefault()
-  $.get(`${API_USERS_URL}${userID}`)
-    .then(data => {
-      let getData = data[0];
-      $('#del-user-id').text(`${getData.id}`)
-      $('#del-user-first-name').text(`${getData.first_name}`)
-      $('#del-user-last-name').text(`${getData.last_name}`)
-    })
-    .fail(() => alert('Fetched failed!'))
-}
+Object.assign(window, modals);
+// .modals
 
 // jquery document ready function
 $(function () {
-  const getNameAry = document.cookie.split(';').map(
-    data => data.split('').splice(10).join('').split('_').join(' ')
-  );
 
-  $('.header__userName').html(getNameAry)
+  let files;
 
   // open add modal and set to add-mode
   $('#add-btn').click(event => {
     event.preventDefault();
+    $('#userID, #basic-addon6').addClass('d-none');
     $('input').val('');
     $('#modal-confirm-btn').removeClass('edit-mode').addClass('add-mode');
     $('#userModalLabel').text('Add a new user');
@@ -67,12 +35,15 @@ $(function () {
   $('#modal-confirm-btn').click(event => {
     event.preventDefault()
     let [
+      file,
+      id,
       first_name,
       last_name,
       email,
       password,
       confirm_password
     ] = $.map($('input'), data => {
+      console.log(22, data)
       return data.value;
     })
 
@@ -92,6 +63,8 @@ $(function () {
           password: password
         }
 
+        console.log(111, newUserData)
+
         $.ajax({
           url: API_USERS_URL,
           method: 'POST',
@@ -105,38 +78,39 @@ $(function () {
       }
     }
 
+
     if ($('#modal-confirm-btn').hasClass('edit-mode')) {
       // edit mode
       let alertMsg = 'Please check/confirm your password!';
-
-      if (first_name === '') return alert('First Name is required.')
-      if (last_name === '') return alert('Last Name is required.')
-      if (email === '') return alert('Email is required.')
+      if (first_name === '') return alert('First Name is required.');
+      if (last_name === '') return alert('Last Name is required.');
+      if (email === '') return alert('Email is required.');
       if (!checkEmail($('#email').val())) return alert(alertMsg);
-      if (password !== prevPassword) {
-        if (password !== confirm_password) return alert(alertMsg)
+      if (password !== $('#password').attr('data-prevpassword')) {
+        if (password !== confirm_password) return alert(alertMsg);
       }
 
       if (confirm_password
         ? password !== confirm_password
         : false
-      ) return alert(alertMsg)
+      ) return alert(alertMsg);
 
-      if (password === '' && confirm_password === '') return alert(alertMsg)
+      if (password === '' && confirm_password === '') return alert(alertMsg);
 
       let editUserData = {
         first_name: first_name,
         last_name: last_name,
-        password: `${prevPassword === password ? '' : password}`,
+        password: `${$('#password').attr('data-prevpassword') === password ? '' : password}`,
         email: email,
-      }
+      };
+
       $.ajax({
-        url: `${API_USERS_URL}${editUserID}`,
+        url: `${API_USERS_URL}${id}`,
         method: 'PUT',
         data: editUserData,
         success: window.location.reload(),
         error: () => alert('User updated failed!'),
-      })
+      });
     }
   })
 
@@ -149,6 +123,51 @@ $(function () {
       error: () => alert('User deleted failed!'),
     })
   })
+
+
+  // file upload
+
+  $('#fileInput').change(event => files = event.target.files);
+
+  $('#uploadBtn').click((event) => {
+    event.preventDefault();
+    if (!files) return alert('No file selected!');
+    let formData = new FormData(files[0]);
+
+    formData.append('Files', files[0], files[0].originalname)
+
+    $.ajax({
+      url: `${API_FILEUPLOAD_URL}`,
+      type: 'POST',
+      data: formData,
+      cache: false,
+      processData: false,
+      contentType: false,
+      success: (req, res) => {
+        if (res === 'success') alert('File upload completed.');
+        return;
+      },
+      error: err => console.log(err)
+    })
+      .then($('#fileInput').val(''))
+      .then(window.location.reload())
+  })
+
+
+  // file download
+  $('#downloadBtn').click(() => {
+    let fileName = 'Slice.png';
+    $.ajax({
+      url: `${API_FILEDOWNLOAD_URL}${fileName}`,
+      method: 'GET',
+      success: res => {
+        if (res === 'success') alert('File download completed.');
+        return;
+      },
+      error: err => console.log(`Something went wrong, status : ${err.status}`)
+    })
+  })
+
 
   // logout function
   $('#logout-btn').click(() => {
@@ -168,4 +187,19 @@ $(function () {
     return regex.test(email);
   }
 
+
+  if (location.hash) {
+    $("a[href='" + location.hash + "']").tab("show");
+  }
+  $(document.body).on("click", "a[data-toggle]", function (event) {
+    location.hash = this.getAttribute("href");
+  });
+
+
+  $(window).on("popstate", function () {
+    var anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");
+    $("a[href='" + anchor + "']").tab("show");
+  });
+
 }); //eof document ready function
+

@@ -17,7 +17,7 @@ $(function () {
         return alert('Please confirm/check your ID/PW');
       },
       success: () => {
-        return location.href = '/userPage'
+        return location.href = '/manager'
       },
       xhrFields: {
         withCredentials: true
